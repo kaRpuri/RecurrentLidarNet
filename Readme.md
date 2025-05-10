@@ -1,6 +1,6 @@
 # 🏎️ F1TENTH Autonomous Racing: Recurrent LidarNet
 
-![Network Architecture](Images/image.png)
+
 
 ## 📌 Overview
 
