@@ -1,0 +1,11 @@
+name: tln
+channels:
+  - conda-forge      # put conda‑forge first for better ARM coverage
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - matplotlib
+  - scikit-learn  
+  
+  #- tensorflow=2.13.1 #install tensorflow manually with pip install tensorflow==2.13.1

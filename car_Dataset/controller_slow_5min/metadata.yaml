@@ -1,0 +1,21 @@
+rosbag2_bagfile_information:
+  version: 5
+  storage_identifier: sqlite3
+  duration:
+    nanoseconds: 297552590938
+  starting_time:
+    nanoseconds_since_epoch: 1745479674966814870
+  message_count: 0
+  topics_with_message_count:
+    []
+  compression_format: ""
+  compression_mode: ""
+  relative_file_paths:
+    - controller_slow_5min_0.db3
+  files:
+    - path: controller_slow_5min_0.db3
+      starting_time:
+        nanoseconds_since_epoch: 1745479674966814870
+      duration:
+        nanoseconds: 297552590938
+      message_count: 26796

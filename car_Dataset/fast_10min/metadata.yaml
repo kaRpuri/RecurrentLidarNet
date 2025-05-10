@@ -1,0 +1,56 @@
+rosbag2_bagfile_information:
+  version: 5
+  storage_identifier: sqlite3
+  duration:
+    nanoseconds: 467031929961
+  starting_time:
+    nanoseconds_since_epoch: 1745494683158440676
+  message_count: 17202
+  topics_with_message_count:
+    - topic_metadata:
+        name: imu
+        type: vesc_msgs/msg/VescImuStamped
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 2867
+    - topic_metadata:
+        name: imu_raw
+        type: sensor_msgs/msg/Imu
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 2867
+    - topic_metadata:
+        name: pose
+        type: geometry_msgs/msg/PoseStamped
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 2867
+    - topic_metadata:
+        name: scan
+        type: sensor_msgs/msg/LaserScan
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 2867
+    - topic_metadata:
+        name: pf_odom
+        type: nav_msgs/msg/Odometry
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 2867
+    - topic_metadata:
+        name: odom
+        type: nav_msgs/msg/Odometry
+        serialization_format: cdr
+        offered_qos_profiles: ""
+      message_count: 2867
+  compression_format: ""
+  compression_mode: ""
+  relative_file_paths:
+    - fast_5min_0.db3
+  files:
+    - path: fast_5min_0.db3
+      starting_time:
+        nanoseconds_since_epoch: 1745494683158440676
+      duration:
+        nanoseconds: 467031929961
+      message_count: 17202
