@@ -73,9 +73,9 @@ python data_collection.py
 
 Train RLN or TLN models with:
 ```bash
-python train_modified.py --config tln.yml
+python train.py
 ```
-- Update the `tln.yml` file to switch architectures or change hyperparameters.
+
 
 ---
 
@@ -83,8 +83,9 @@ python train_modified.py --config tln.yml
 
 Evaluate a trained model on test data:
 ```bash
-python inference.py --model Models/your_model.h5 --data car_Dataset/
+python inference.py
 ```
+be sure to give the correct path.
 
 ---
 
@@ -125,29 +126,6 @@ python inference.py --model Models/your_model.h5 --data car_Dataset/
 └── Readme.md          # Project documentation
 ```
 
----
 
-## 🛠️ Future Work
 
-- Integrate additional sensor modalities (e.g., IMU, camera)
-- Investigate reinforcement learning-based policies
-- Optimize for real-time embedded deployment
-- Extend to multi-agent and competitive racing environments
 
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙌 Acknowledgments
-
-- [F1TENTH Autonomous Racing](https://f1tenth.org/)
-- Levine Hall, University of Pennsylvania (for environment and data support)
-- Open-source contributors from the F1TENTH and deep learning communities
-
----
-
-For questions, issues, or contributions, feel free to open an issue or submit a pull request.
