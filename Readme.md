@@ -8,21 +8,7 @@ This project introduces **Recurrent LidarNet (RLN)** — a temporal-aware, deep 
 
 The repository includes all code, trained models, and datasets required to reproduce results and experiment with the RLN framework.
 
----
 
-## Table of Contents
-
-- [Project Structure](#project-structure)
-- [Key Features](#key-features)
-- [Setup & Installation](#setup--installation)
-- [Usage](#usage)
-- [Results](#results)
-- [Directory Details](#directory-details)
-- [Future Work](#future-work)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
----
 
 ## Key Features
 
@@ -86,20 +72,7 @@ be sure to give the correct path.
 
 ---
 
-##  Directory Details
 
-```
-.
-├── Figures/           # Report visualizations
-├── Images/            # Architecture diagrams & results
-├── Models/            # Trained model checkpoints
-├── car_Dataset/       # Training & test data
-├── data_collection.py # Data collection script
-├── inference.py       # Model inference script
-├── train_modified.py  # Main training script
-├── tln.yml            # Model config file
-└── Readme.md          # Project documentation
-```
 
 
 
