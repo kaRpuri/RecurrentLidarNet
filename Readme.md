@@ -1,8 +1,8 @@
-# 🏎️ F1TENTH Autonomous Racing: Recurrent LidarNet
+#  F1TENTH Autonomous Racing: Recurrent LidarNet
 
 
 
-## 📌 Overview
+## Overview
 
 This project introduces **Recurrent LidarNet (RLN)** — a temporal-aware, deep learning architecture for autonomous racing on the F1TENTH platform. RLN leverages sequential 2D LiDAR data using a combination of convolutional, recurrent, and attention mechanisms to enhance spatial-temporal perception and improve driving control.
 
@@ -10,7 +10,7 @@ The repository includes all code, trained models, and datasets required to repro
 
 ---
 
-## 📁 Table of Contents
+## Table of Contents
 
 - [Project Structure](#project-structure)
 - [Key Features](#key-features)
@@ -24,7 +24,7 @@ The repository includes all code, trained models, and datasets required to repro
 
 ---
 
-## 🧠 Key Features
+## Key Features
 
 - **Recurrent LidarNet Architecture**: Combines 1D convolutions, bidirectional LSTM, and attention to extract robust temporal features from LiDAR sequences.
 - **End-to-End Learning**: Predicts steering and velocity commands directly from raw LiDAR data.
@@ -33,34 +33,9 @@ The repository includes all code, trained models, and datasets required to repro
 
 ---
 
-## ⚙️ Setup & Installation
+## Usage
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/f1tenth-recurrent-lidarnet.git
-   cd f1tenth-recurrent-lidarnet
-   ```
-
-2. **Install dependencies**:
-   - Python 3.8+
-   - (Recommended) Create a virtual environment
-   - Install required packages:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - If `requirements.txt` is missing, manually install:
-     ```bash
-     pip install tensorflow numpy matplotlib pyyaml
-     ```
-
-3. **Prepare the dataset**:
-   - Place your training/testing data in the `car_Dataset/` folder.
-
----
-
-## 🚀 Usage
-
-### 📦 Data Collection
+### Data Collection
 
 Use the following script to collect driving data from the F1TENTH platform:
 ```bash
@@ -69,7 +44,7 @@ python data_collection.py
 
 ---
 
-### 🏋️ Training
+### Training
 
 Train RLN or TLN models with:
 ```bash
@@ -79,7 +54,7 @@ python train.py
 
 ---
 
-### 🔍 Inference
+### Inference
 
 Evaluate a trained model on test data:
 ```bash
@@ -89,9 +64,9 @@ be sure to give the correct path.
 
 ---
 
-## 📊 Results
+## Results
 
-### 📈 Training & Validation Loss
+### Training & Validation Loss
 
 ![Loss Curves](Images/Screenshot%202025-05-10%20165238.png)
 
@@ -99,7 +74,7 @@ be sure to give the correct path.
 
 ---
 
-### 🧱 Network Architecture
+### Network Architecture
 
 ![Network Architecture](Images/image.png)
 
@@ -111,7 +86,7 @@ be sure to give the correct path.
 
 ---
 
-## 📂 Directory Details
+##  Directory Details
 
 ```
 .
