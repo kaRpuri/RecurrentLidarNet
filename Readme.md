@@ -32,7 +32,7 @@ python data_collection.py
 
 ### Training
 
-Train RLN or TLN models with:
+Train RLN with:
 ```bash
 python train.py
 ```
