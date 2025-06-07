@@ -251,7 +251,7 @@ class AutonomousNode(Node):
                     f'Deadline miss: {dur*1000:.1f} ms'
                 )
             self.start_ts = time.time()
-            self.init_ts = time.time()
+            # self.init_ts = time.time()
             
         except Exception as e:
             self.get_logger().error(f'Error in control_loop: {e}')
