@@ -11,10 +11,15 @@ from rclpy.parameter import Parameter
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
 
 import tensorflow as tf
-from sensor_msgs.msg import LaserScan, Joy
+from sensor_msgs.msg import LaserScan, Joy, Imu
 from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry
+from vesc_msgs.msg import VescImuStamped
 from ackermann_msgs.msg import AckermannDriveStamped
 import matplotlib.pyplot as plt
+import message_filters
+from rosbag2_py import SequentialWriter, StorageOptions, ConverterOptions, TopicMetadata
+from rclpy.serialization import serialize_message
 
 
 class AutonomousNode(Node):
@@ -65,6 +70,12 @@ class AutonomousNode(Node):
         self.declare_parameter('is_joy', False)
         self.prev_button = 0
 
+        # ---------- bag state ----------
+        self.bag_open = False
+        self.writer = None
+        self.recording_active = False
+        self.msg_counter = 0
+
         # Loop timing
         self.hz = 40.0
         self.period = 1.0 / self.hz
@@ -94,6 +105,29 @@ class AutonomousNode(Node):
         self.drive_pub = self.create_publisher(
             AckermannDriveStamped, '/drive', 10
         )
+
+        # ---------- Subscribers for bag recording ----------
+        sensor_qos = QoSProfile(
+            depth=20,
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            durability=QoSDurabilityPolicy.VOLATILE
+        )
+        self.odom_sub = message_filters.Subscriber(self, Odometry, '/odom')
+        self.pf_sub = message_filters.Subscriber(self, Odometry, '/pf/pose/odom')
+        self.scan_sub_record = message_filters.Subscriber(
+            self, LaserScan, '/scan', qos_profile=sensor_qos)
+        self.pose_sub = message_filters.Subscriber(
+            self, PoseStamped, '/pf/viz/inferred_pose')
+        self.imu_raw_sub = message_filters.Subscriber(
+            self, Imu, '/sensors/imu/raw')
+        self.imu_sub = message_filters.Subscriber(
+            self, VescImuStamped, '/sensors/imu')
+
+        self.ts = message_filters.ApproximateTimeSynchronizer(
+            [self.odom_sub, self.pf_sub, self.scan_sub_record,
+             self.pose_sub, self.imu_raw_sub, self.imu_sub],
+            queue_size=20, slop=0.05, allow_headerless=True)
+        self.ts.registerCallback(self.sensor_cb)
 
         # Timer for control loop
         self.create_timer(self.period, self.control_loop)
@@ -128,12 +162,74 @@ class AutonomousNode(Node):
             curr = msg.buttons[0]  # A button
             if curr == 1 and curr != self.prev_button:
                 new_val = not self.get_parameter('is_joy').value
-                self.set_parameters([Parameter('is_joy',
-                                            Parameter.Type.BOOL,
-                                            new_val)])
+                self.set_parameters([
+                    Parameter('is_joy', Parameter.Type.BOOL, new_val)
+                ])
+                if new_val:
+                    if not self.bag_open:
+                        self._open_bag()
+                    else:
+                        self.recording_active = True
+                else:
+                    self._close_bag()
             self.prev_button = curr
         except Exception as e:
             self.get_logger().error(f'Error in button_callback: {e}')
+
+    # ------------------------------------------------------------- Bag handling
+    def _open_bag(self):
+        stamp = int(time.time())
+        uri = f'car_Dataset/manual_{stamp}'
+        self.get_logger().info(f'\U0001F3AC Bag opened \u2192 {uri}')
+
+        self.writer = SequentialWriter()
+        self.writer.open(
+            StorageOptions(uri=uri, storage_id='sqlite3'),
+            ConverterOptions('', '')
+        )
+        for name, mtype in [
+                ('odom', 'nav_msgs/msg/Odometry'),
+                ('pf_odom', 'nav_msgs/msg/Odometry'),
+                ('scan', 'sensor_msgs/msg/LaserScan'),
+                ('pose', 'geometry_msgs/msg/PoseStamped'),
+                ('imu_raw', 'sensor_msgs/msg/Imu'),
+                ('imu', 'vesc_msgs/msg/VescImuStamped')]:
+            self.writer.create_topic(
+                TopicMetadata(name=name, type=mtype, serialization_format='cdr')
+            )
+
+        self.bag_open = True
+        self.msg_counter = 0
+        self.recording_active = True
+
+    def _close_bag(self):
+        if self.writer:
+            self.writer.close()
+            self.get_logger().info(
+                f'\u23F9\uFE0F  Bag closed (total {self.msg_counter} msgs)'
+            )
+        self.bag_open = False
+        self.recording_active = False
+        self.writer = None
+
+    def sensor_cb(self, odom, pf_odom, scan, pose, imu_raw, imu):
+        if not self.recording_active:
+            return
+
+        t = self.get_clock().now().nanoseconds
+        try:
+            self.writer.write('odom', serialize_message(odom), t)
+            self.writer.write('pf_odom', serialize_message(pf_odom), t)
+            self.writer.write('scan', serialize_message(scan), t)
+            self.writer.write('pose', serialize_message(pose), t)
+            self.writer.write('imu_raw', serialize_message(imu_raw), t)
+            self.writer.write('imu', serialize_message(imu), t)
+
+            self.msg_counter += 1
+            if self.msg_counter % 10 == 0:
+                self.get_logger().info(f'… {self.msg_counter} msgs')
+        except Exception as e:
+            self.get_logger().error(f'Write error: {e}')
 
     def odom_callback(self, msg: PoseStamped):
         try:
@@ -221,6 +317,11 @@ class AutonomousNode(Node):
     def control_loop(self):
         try:
             joy = self.get_parameter('is_joy').value
+            if joy and not self.bag_open:
+                self._open_bag()
+            elif not joy and self.bag_open:
+                self._close_bag()
+
             self.get_logger().info(
                 f'Manual: {"ON" if joy else "OFF"} | '
                 f'Dist: {self.total_distance:.2f} m'
@@ -251,10 +352,15 @@ class AutonomousNode(Node):
                     f'Deadline miss: {dur*1000:.1f} ms'
                 )
             self.start_ts = time.time()
-            # self.init_ts = time.time()
+            self.init_ts = time.time()
             
         except Exception as e:
             self.get_logger().error(f'Error in control_loop: {e}')
+
+    # ------------------------------------------------------------- Shutdown
+    def destroy_node(self):
+        self._close_bag()
+        super().destroy_node()
 
 def plot_results(t_unused, speed, steer, filename="speed_steering_plot.png"):
     plt.figure(figsize=(10, 5))
