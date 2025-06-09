@@ -33,7 +33,7 @@ class AutonomousNode(Node):
         try:
             model_path = os.path.join(
                 os.path.dirname(__file__),
-                'Models/test3.tflite'
+                'Models/RNN_Attn_Controller.tflite'
             )
             
             # Check if model file exists
@@ -335,7 +335,7 @@ class AutonomousNode(Node):
                 steer = self.linear_map(steer, -1.0, 1.0, -0.34, 0.34)
 
                 msg = AckermannDriveStamped()
-                msg.drive.speed = speed * 0.7
+                msg.drive.speed = speed * 1.2
                 msg.drive.steering_angle = steer
                 self.drive_pub.publish(msg)
 
