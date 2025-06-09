@@ -1,0 +1,40 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/nvidia/f1tenth_ws/install/f1tenth_stack/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/vesc_msgs/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/joy_teleop/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/teleop_tools_msgs/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/pure_pursuit/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/particle_filter/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/opponent_predictor/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/mpc/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/mouse_teleop/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/lane_follow/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/lab7_pkg/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/key_teleop/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/gap_follow/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/final_6500/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/dummy_car/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/nvidia/f1tenth_ws/install/f1tenth_stack/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/vesc_msgs/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/joy_teleop/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/teleop_tools_msgs/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/pure_pursuit/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/particle_filter/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/opponent_predictor/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/mpc/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/mouse_teleop/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/lane_follow/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/lab7_pkg/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/key_teleop/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/gap_follow/local/lib/python3.10/dist-packages",
+        "/home/nvidia/f1tenth_ws/install/final_6500/lib/python3.10/site-packages",
+        "/home/nvidia/f1tenth_ws/install/dummy_car/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

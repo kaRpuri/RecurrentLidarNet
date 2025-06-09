@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/nvidia/f1tenth_ws/install/vesc_driver/include/**",
+        "/home/nvidia/f1tenth_ws/install/vesc_ackermann/include/**",
+        "/home/nvidia/f1tenth_ws/install/vesc_msgs/include/**",
+        "/home/nvidia/f1tenth_ws/install/teleop_tools_msgs/include/**",
+        "/home/nvidia/f1tenth_ws/install/ackermann_mux/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/nvidia/f1tenth_ws/src/f1tenth-racing-stack-ICRA22/opponent_predictor/include/**",
+        "/home/nvidia/f1tenth_ws/src/f1tenth_system/ackermann_mux/include/**",
+        "/home/nvidia/f1tenth_ws/src/f1tenth_system/vesc/vesc_ackermann/include/**",
+        "/home/nvidia/f1tenth_ws/src/f1tenth_system/vesc/vesc_driver/include/**",
+        "/home/nvidia/f1tenth_ws/src/sampling-based-motion-planning-team2/lab7_pkg/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-arm64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
