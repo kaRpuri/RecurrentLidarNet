@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from stable_baselines3 import PPO
+import gym
 
 # 1) load your test sequences (same preprocessing you used in training)
 def load_npz(npz_paths, seq_len):
@@ -16,6 +17,7 @@ def load_npz(npz_paths, seq_len):
     S = np.concatenate(all_s, axis=0)
     P = np.concatenate(all_sp, axis=0)
     T = np.concatenate(all_t, axis=0)
+
     X, y = [], []
     N = L.shape[1]
     for i in range(len(L) - seq_len):
@@ -33,12 +35,12 @@ interpreter.allocate_tensors()
 inp_detail = interpreter.get_input_details()[0]
 out_detail = interpreter.get_output_details()[0]
 
-# 3) load supervised Keras controller & RL tuner
-sup_model = load_model("Models/sup_controller.keras")
-final = sup_model.get_layer("final_dense")
-W0, b0 = final.get_weights()
+# 3) load supervised Keras controller & RL fine-tuned policy
+sup_model = load_model("Models/sup_controller.h5", compile=False)
 
-rl = PPO.load("Models/ppo_rltuner.zip")
+# load your fine-tuned head PPO policy
+META_RL_PATH = "Models/meta_rl_finetuned_head.zip"
+meta_rl = PPO.load(META_RL_PATH)
 
 # 4) run inference on test set
 seq_len = inp_detail["shape"][1]
@@ -47,27 +49,22 @@ split = int(0.85*len(X))
 X_test, y_test = X[split:], y[split:]
 
 base_preds, tuned_preds = [], []
-
 for seq, tgt in zip(X_test, y_test):
-    # a) base TFLite
     inp = seq[None,...]
+
+    # a) base TFLite
     interpreter.set_tensor(inp_detail['index'], inp)
     interpreter.invoke()
     base_preds.append(interpreter.get_tensor(out_detail['index'])[0])
 
-    # b) RL‐tuned: get delta, apply to final layer, run sup_model
-    delta, _ = rl.predict(seq, deterministic=True)
-    dW = delta[:W0.size].reshape(W0.shape)
-    db = delta[W0.size:].reshape(b0.shape)
-    final.set_weights([W0 + dW, b0 + db])
-    tuned_preds.append(sup_model.predict(inp, verbose=0)[0])
-    # restore
-    final.set_weights([W0, b0])
+    # b) meta-RL tuned via PPO
+    action, _ = meta_rl.predict(inp, deterministic=True)
+    tuned_preds.append(action[0] if action.ndim>1 else action)
 
-base_preds = np.array(base_preds)
-tuned_preds = np.array(tuned_preds)
+base_preds   = np.stack(base_preds)
+tuned_preds  = np.stack(tuned_preds)
 errors_base  = np.mean((base_preds  - y_test)**2, axis=1)
 errors_tuned = np.mean((tuned_preds - y_test)**2, axis=1)
 
 print(f"Base TFLite   MSE: {errors_base.mean():.4f} ± {errors_base.std():.4f}")
-print(f"RL-tuned MSE: {errors_tuned.mean():.4f} ± {errors_tuned.std():.4f}")
+print(f"Meta-RL PPO   MSE: {errors_tuned.mean():.4f} ± {errors_tuned.std():.4f}")
